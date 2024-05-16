@@ -1,11 +1,12 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template, url_for, redirect
 from .sorvete_model import sorvete_por_id, list_sorvete, sorvete_existe, add_sorvete, delete_sorvete, update_sorvete, SorveteNaoEncontrado
 
 sorvetes_blueprint = Blueprint('sorvete', __name__)
 
 @sorvetes_blueprint.route('/sorvetes', methods=['GET'])
 def get_sorvetes():
-    return jsonify(list_sorvete())
+    sorvetes = list_sorvete()
+    return render_template("sorvete.html", sorvetes=sorvetes)
 
 @sorvetes_blueprint.route('/sorvetes', methods=['POST'])
 def post_sorvetes():
@@ -40,6 +41,6 @@ def edit_sorvete(idSorvete):
 def deletar_sorvete(idSorvete):
         try:
             delete_sorvete(idSorvete)
-            return "deletado!"
+            return redirect(url_for('sorvetes.get_sorvetes'))
         except SorveteNaoEncontrado:
             return jsonify({'message' : 'Erro, sorvete não encontrado no sistema'})
