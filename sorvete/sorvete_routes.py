@@ -8,6 +8,19 @@ def get_sorvetes():
     sorvetes = list_sorvete()
     return render_template("sorvete.html", sorvetes=sorvetes)
 
+@sorvetes_blueprint.route('/sorvetes/<int:idSorvete>', methods=['GET'])
+def get_sorvete(idSorvete):
+    try:
+        sorvete = sorvete_por_id(idSorvete)
+        return render_template('sorvete_id.html', sorvete=sorvete)
+    except SorveteNaoEncontrado:
+        return jsonify({'message': 'Sorvete não encontrado'}), 404
+
+## ROTA ACESSAR O FORMULARIO DE CRIAÇÃO DE UM NOVO ALUNOS   
+@sorvetes_blueprint.route('/alunos/adicionar', methods=['GET'])
+def adicionar_sorvetes_page():
+    return render_template('criarSorvetes.html')
+
 @sorvetes_blueprint.route('/sorvetes', methods=['POST'])
 def post_sorvetes():
     data = request.json
@@ -25,6 +38,7 @@ def remove_sorvete(idSorvete):
     delete_sorvete(idSorvete)
     return "removido!"
 
+#
 @sorvetes_blueprint.route('/sorvetes/<int:idSorvete>', methods=['PUT'])
 def edit_sorvete(idSorvete):
     try:
@@ -33,7 +47,7 @@ def edit_sorvete(idSorvete):
             return jsonify({'erro':'sabor de sorvete não encontrado'}), 400
         else:
             update_sorvete(idSorvete, data)
-            return jsonify({'ok':f'sorvete alterado para {data['sabor'], data['categoria'], data['preco'], data['qntd_estoque']}'})
+            return redirect(url_for('sorvetes.get_sorvete', idSorvete=idSorvete))
     except SorveteNaoEncontrado:
         return jsonify({'message' : 'Erro sorvete não encontrado no sistema'})
 

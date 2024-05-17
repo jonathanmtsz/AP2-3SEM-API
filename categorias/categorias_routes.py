@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, redirect, url_for
 from .categorias_model import categorias_por_id, list_categorias, categorias_existe, add_categorias, delete_categorias, update_categorias, CategoriaNaoEncontada
 
 categorias_blueprint = Blueprint('categorias', __name__)
@@ -32,7 +32,7 @@ def edit_categorias(idCategorias):
             return jsonify({'erro':'nome de categoria não encontrado'}), 400
         else:
             update_categorias(idCategorias, data)
-            return jsonify({'ok':f'categoria alterado para {data['nome_categoria']}'})
+            return redirect(url_for('categorias.get_categorias', idCategorias=idCategorias))
     except CategoriaNaoEncontada:
         return jsonify({'message' : 'Erro categoria não encontrada no sistema'})
 
