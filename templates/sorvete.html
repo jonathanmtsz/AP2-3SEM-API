@@ -12,7 +12,7 @@
   <h1>Lista de Sorvetes</h1>
   <ul>
     {% for sorvete in sorvetes %}
-    <li><a href="{{ url_for('sorvete.get_sorvetes', idSorvete=sorvete.id) }}">{{ sorvete.nome }} (ID: {{ sorvete.id }})</a></li>
+    <li><a href="{{ url_for('sorvete.get_sorvete', idSorvete=sorvete.id) }}">{{ sorvete.nome }} (ID: {{ sorvete.id }})</a></li>
     {% endfor %}
   </ul>
 
